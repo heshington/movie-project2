@@ -40,9 +40,7 @@ class Movie(db.Model):
     review = db.Column(db.String(120))
     img_url = db.Column(db.String(120), nullable=False)
 
-
 db.create_all()
-
 
 # Edit form
 class EditForm(FlaskForm):
@@ -59,7 +57,14 @@ class AddForm(FlaskForm):
 
 @app.route("/")
 def home():
-    all_movies = db.session.query(Movie).all()
+    # all_movies = db.session.query(Movie).all()
+    all_movies = db.session.query(Movie).order_by(Movie.rating).all()
+    print(len(all_movies))
+    rank = len(all_movies)
+    for movie in all_movies:
+        movie.ranking = rank
+        rank = rank -1
+
     return render_template("index.html", movies=all_movies)
 
 
